@@ -4,9 +4,16 @@ from agents.create_agent import create_agent
 agent = create_agent()
 
 # Test the agent
-query = "Find similar companies to XYZ Corp and recommend services for them."
-response = agent.invoke({"input": query})
+query1 = "Recommend services for XYZ Corp."
+response1 = agent.invoke({"input": query1})
 
-# Print the agent response
-print("Agent Response:")
-print(response)
+# Print the response
+print("Agent Response (Recommendation):")
+print(response1)
+
+query2 = "Find similar companies to Acme Corp."
+response2 = agent.invoke({"input": query2})
+
+# Print the response
+print("Agent Response (Find Similar):")
+print(response2)

@@ -1,6 +1,6 @@
 from langchain.agents import initialize_agent
 from langchain_openai import ChatOpenAI
-from tools.company_tools import find_similar_companies
+from tools.company_tools import find_similar_companies, recommend_client_services
 from langchain.tools import Tool
 from dotenv import load_dotenv
 import os
@@ -18,6 +18,11 @@ def create_agent():
             name="Find Similar Companies",
             func=find_similar_companies,
             description="Tool to find similar companies based on a company name."
+        ),
+        Tool(
+            name="Recommend Services",
+            func=recommend_client_services,
+            description="Tool to recommend services for a client."
         )
     ]
 
