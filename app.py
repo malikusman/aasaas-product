@@ -3,10 +3,10 @@ from agents.create_agent import create_agent
 # Initialize the agent
 agent = create_agent()
 
-# First query
-response1 = agent.invoke({"input": "Find similar companies to Acme Corp."})
-print("Response 1:", response1)
+# Test enhanced recommendations
+query = "Recommend services for Acme Corp."
+response = agent.invoke({"input": query})
 
-# Second query with memory
-response2 = agent.invoke({"input": "Now recommend services for Acme Corp."})
-print("Response 2:", response2)
+# Print the agent response
+print("Agent Response:")
+print(response)
