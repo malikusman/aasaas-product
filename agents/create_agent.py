@@ -1,5 +1,6 @@
 from langchain.agents import initialize_agent
 from langchain_openai import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
 from tools.company_tools import find_similar_companies, recommend_client_services
 from langchain.tools import Tool
 from dotenv import load_dotenv
@@ -31,12 +32,16 @@ def create_agent():
         model="gpt-3.5-turbo",
         openai_api_key=openai_api_key
     )
+    
+    # Add memory
+    memory = ConversationBufferMemory(memory_key="chat_history")
 
     # Initialize the Agent
     agent = initialize_agent(
         tools=tools,
         llm=llm,
         agent="zero-shot-react-description",
-        verbose=True
+        verbose=True,
+        memory=memory
     )
     return agent
