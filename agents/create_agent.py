@@ -12,18 +12,18 @@ load_dotenv()
 # Access the OpenAI API key
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-def create_agent():
+def create_agent(client_name: str):
     # Define tools
     tools = [
         Tool(
-            name="Find Similar Companies",
+            name=f"Find Similar Companies {client_name}",
             func=find_similar_companies,
-            description="Tool to find similar companies based on a company name."
+            description=f"Find similar companies based on the client's name: {client_name}"
         ),
         Tool(
-            name="Recommend Services",
+            name=f"Recommend Services for {client_name}",
             func=recommend_client_services,
-            description="Tool to recommend services for a client."
+            description=f"Recommend services specific to {client_name}"
         )
     ]
 
@@ -34,7 +34,7 @@ def create_agent():
     )
     
     # Add memory
-    memory = ConversationBufferMemory(memory_key="chat_history")
+    memory = ConversationBufferMemory(memory_key=f"{client_name}_chat_history")
 
     # Initialize the Agent
     agent = initialize_agent(

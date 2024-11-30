@@ -1,14 +1,7 @@
-# from database import engine, Base
+from crud import add_company, add_client
+from agents.create_agent import create_agent
 
-# # Create tables
-# Base.metadata.create_all(bind=engine)
-
-# print("Tables created successfully.")
-
-
-from crud import add_company, add_client, get_clients, add_recommendation, add_conversation
-
-# Test: Add a company
+# Add a company
 company_data = {
     "name": "VaporVM",
     "email": "info@vaporvm.com",
@@ -17,10 +10,9 @@ company_data = {
     "website": "www.vaporvm.com"
 }
 company = add_company(company_data)
-print(f"Company added: {company.name}")
 
-# Test: Add a client
-client_data = {
+# Add clients for VaporVM
+client_data_1 = {
     "company_id": company.id,
     "name": "Du",
     "services_taken": "Cloud Management, Server Hosting",
@@ -29,27 +21,24 @@ client_data = {
     "email": "info@du.ae",
     "phone": "9876543210"
 }
-client = add_client(client_data)
-print(f"Client added: {client.name}")
+add_client(client_data_1)
 
-# Test: Get clients
-clients = get_clients(company.id)
-for client in clients:
-    print(f"Client: {client.name}, Services: {client.services_taken}")
-
-# Test: Add a recommendation
-recommendation_data = {
-    "client_id": client.id,
-    "similar_company": "Etisalat",
-    "recommended_services": "Cloud Monitoring, Server Hosting"
+client_data_2 = {
+    "company_id": company.id,
+    "name": "Damac",
+    "services_taken": "Cloud Management, Cloud Monitoring",
+    "why_with_us": "Cost savings",
+    "website": "www.damac.com",
+    "email": "info@damac.com",
+    "phone": "9876543211"
 }
-recommendation = add_recommendation(recommendation_data)
-print(f"Recommendation added: {recommendation.similar_company}")
+add_client(client_data_2)
 
-# Test: Add a conversation
-conversation = add_conversation(
-    session_id="session123",
-    user_input="Find similar companies to Du.",
-    agent_output="Etisalat, STC"
-)
-print(f"Conversation logged: {conversation.user_input} -> {conversation.agent_output}")
+# Create an agent for VaporVM
+agent_vaporvm = create_agent("VaporVM")
+
+# Test find similar companies tool
+response_vaporvm = agent_vaporvm.invoke({
+    "input": "Find similar companies to Du."
+})
+print(f"Agent Response: {response_vaporvm}")

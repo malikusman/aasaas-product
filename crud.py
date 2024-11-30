@@ -1,3 +1,4 @@
+import datetime
 from database import SessionLocal, Company, Client, Recommendation, Conversation
 
 def add_company(company_data):
@@ -63,11 +64,7 @@ def add_recommendation(recommendation_data):
         
 def add_conversation(session_id, user_input, agent_output):
     """
-    Add a new conversation to the database and return it with loaded attributes.
-    :param session_id: Session identifier
-    :param user_input: User's input
-    :param agent_output: Agent's output
-    :return: Newly created conversation object
+    Add a new conversation to the database.
     """
     db = SessionLocal()
     try:
@@ -78,11 +75,32 @@ def add_conversation(session_id, user_input, agent_output):
         )
         db.add(new_conversation)
         db.commit()
-        # Explicitly load attributes before closing the session
-        db.refresh(new_conversation)
+        db.refresh(new_conversation)  # Ensure attributes are loaded
         return new_conversation
     finally:
         db.close()
+
+def get_conversation_history(client_name: str):
+    """
+    Retrieve all chat history for a specific client.
+    """
+    db = SessionLocal()
+    try:
+        return db.query(Conversation).filter(Conversation.session_id.like(f"{client_name}_%")).all()
+    finally:
+        db.close()
+
+def save_conversation(client_name: str, user_input: str, agent_output: str):
+    """
+    Save a conversation for a specific client.
+    """
+    session_id = f"{client_name}_{datetime.datetime.now().isoformat()}"
+    return add_conversation(
+        session_id=session_id,
+        user_input=user_input,
+        agent_output=agent_output
+    )
+
 
         
 

@@ -39,3 +39,15 @@ def categorize_services(service: str) -> list:
     }
     return service_map.get(service, [])
 
+def generate_llm_prompt(client_name: str, current_clients: list) -> str:
+    """
+    Generate a detailed prompt for the LLM based on client context.
+    """
+    clients_str = ", ".join(current_clients)
+    return (
+        f"Client {client_name} provides services to these companies: {clients_str}. "
+        f"Please find companies similar to these and suggest what services {client_name} can offer them. "
+        f"Provide detailed and actionable recommendations."
+    )
+
+
