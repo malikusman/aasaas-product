@@ -66,6 +66,25 @@ def history():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/clients/add_agent', methods=['POST'])
+def add_agent():
+    """
+    Add a new agent for a client.
+    """
+    data = request.get_json()
+    client_name = data.get('client_name', '')
+
+    if not client_name:
+        return jsonify({"error": "'client_name' is required"}), 400
+
+    # Check if the agent already exists
+    if client_name in agents:
+        return jsonify({"error": f"Agent for client '{client_name}' already exists"}), 400
+
+    # Create a new agent
+    agents[client_name] = create_agent(client_name)
+    return jsonify({"message": f"Agent for client '{client_name}' created successfully"}), 201
+
 
 if __name__ == "__main__":
     app.run(debug=True)

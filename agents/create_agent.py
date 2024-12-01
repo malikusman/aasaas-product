@@ -1,7 +1,7 @@
 from langchain.agents import initialize_agent
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from tools.company_tools import find_similar_companies, recommend_client_services
+from tools.company_tools import find_similar_companies, recommend_client_services, scrape_and_find_similar_companies
 from langchain.tools import Tool
 from dotenv import load_dotenv
 import os
@@ -24,7 +24,13 @@ def create_agent(client_name: str):
             name=f"Recommend Services for {client_name}",
             func=recommend_client_services,
             description=f"Recommend services specific to {client_name}"
-        )
+        ),
+        Tool(
+        name=f"Scrape and Find Similar Companies {client_name}",
+        func=scrape_and_find_similar_companies,
+        description=f"Scrape the web to find companies similar to {client_name}"
+)
+
     ]
 
     # Initialize LLM

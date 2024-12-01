@@ -1,5 +1,6 @@
 from database import SessionLocal, Company, Client
 from langchain.tools import tool
+from services.scraping_service import scrape_similar_companies
 from services.client_service import load_client_data, recommend_services
 from config import CLIENT_CSV_MAPPING
 
@@ -53,3 +54,13 @@ def recommend_client_services(client_name: str) -> str:
     csv_file = CLIENT_CSV_MAPPING.get(client_name, "data/default_clients.csv")
     data = load_client_data(csv_file)
     return recommend_services(client_name, data)
+
+@tool
+def scrape_and_find_similar_companies(client_name: str) -> str:
+    """
+    Use web scraping to find similar companies to the given client.
+    :param client_name: Name of the company to find similar companies for.
+    :return: List of similar companies as a string.
+    """
+    similar_companies = scrape_similar_companies(client_name)
+    return f"Similar companies to {client_name}: {', '.join(similar_companies)}"
